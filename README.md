@@ -116,6 +116,10 @@ Both scripts render at 300 dpi in publication quality using Computer Modern–st
 
 ---
 
+## Interactive Self-Test
+
+The repo includes an interactive HTML quiz that operationalizes the Besserwisser Theorem as a self-assessment. Open `besserwisser-quiz.html` in your browser or [try it live via GitHub Pages](https://hakvinv.github.io/besserwisser-effect/besserwisser-quiz.html).
+
 ## Citation
 
 ```bibtex

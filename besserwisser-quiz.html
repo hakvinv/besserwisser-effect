@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Besserwisser or Producer? — A Complexity-Theoretic Self-Test</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 680px; margin: 40px auto;
+         padding: 0 20px; background: #fafafa; color: #2c3e50; line-height: 1.6; }
+  h1 { font-size: 1.4em; border-bottom: 2px solid #2c3e50; padding-bottom: 8px; }
+  .subtitle { font-size: 0.9em; color: #666; margin-top: -10px; margin-bottom: 30px; }
+  .question { background: white; border: 1px solid #ddd; border-radius: 6px;
+              padding: 18px 20px; margin-bottom: 16px; }
+  .question p { margin: 0 0 12px 0; font-weight: bold; font-size: 0.97em; }
+  label { display: block; padding: 7px 10px; margin: 4px 0; cursor: pointer;
+          border-radius: 4px; transition: background 0.15s; font-size: 0.93em; }
+  label:hover { background: #f0f4ff; }
+  input[type=radio] { margin-right: 8px; }
+  button { background: #2c3e50; color: white; border: none; padding: 12px 28px;
+           font-size: 1em; font-family: Georgia, serif; border-radius: 4px;
+           cursor: pointer; margin-top: 10px; }
+  button:hover { background: #1a252f; }
+  #result { display: none; background: white; border: 2px solid #2c3e50;
+            border-radius: 6px; padding: 24px; margin-top: 24px; }
+  #result h2 { margin-top: 0; }
+  .bar-wrap { background: #eee; border-radius: 4px; height: 12px;
+              margin: 8px 0 4px 0; overflow: hidden; }
+  .bar { height: 12px; border-radius: 4px; transition: width 0.6s; }
+  .np-bar { background: #1565c0; }
+  .p-bar  { background: #c62828; }
+  .score-label { font-size: 0.85em; color: #555; }
+  .theorem { background: #fffde7; border-left: 4px solid #f9a825;
+             padding: 10px 14px; margin-top: 20px; font-size: 0.88em; }
+  footer { margin-top: 40px; font-size: 0.8em; color: #999; border-top: 1px solid #eee;
+           padding-top: 12px; }
+</style>
+</head>
+<body>
+
+<h1>Besserwisser or Producer?</h1>
+<p class="subtitle">A complexity-theoretic self-test — based on Vosteen (2026) &nbsp;·&nbsp; github.com/hakvinv</p>
+
+<div id="quiz"></div>
+<button onclick="submit()">See result</button>
+<div id="result"></div>
+
+<footer>
+  Based on: H. Vosteen, <em>The Besserwisser Effect: Why Criticism Cannot Substitute for Production</em> (2026).<br>
+  Under P≠NP, no verification-only strategy solves the Production Problem. This quiz operationalises that claim.
+</footer>
+
+<script>
+const questions = [
+  {
+    q: "When you encounter a tool, app, or framework you've never used, your first instinct is:",
+    a: ["To read reviews and comparisons before deciding whether it's worth learning",
+        "To open it and build something with it immediately",
+        "To look up what experts say about it",
+        "To check if people you respect use it"],
+    np: [1]
+  },
+  {
+    q: "You have an idea for a project. What happens next?",
+    a: ["You think about it for a while and maybe mention it to someone",
+        "You start building a rough version within 48 hours",
+        "You research whether it's already been done",
+        "You refine the concept until it feels ready"],
+    np: [1]
+  },
+  {
+    q: "Someone shows you their work. Your immediate internal reaction is:",
+    a: ["Noticing what's wrong or could be improved",
+        "Wondering what it took to make it",
+        "Comparing it to similar work you've seen",
+        "Thinking about whether you could do better"],
+    np: [1]
+  },
+  {
+    q: "How do you feel about unfinished, imperfect work you've shipped?",
+    a: ["Uncomfortable — it reflects on you",
+        "Fine — shipping beats not shipping",
+        "Anxious until you get feedback",
+        "Reluctant to show it until it's polished"],
+    np: [1]
+  },
+  {
+    q: "A new paper / book / video in your field comes out. You:",
+    a: ["Read it and form an opinion",
+        "Check whether it changes anything you're building",
+        "Share it with commentary before finishing it",
+        "Save it for when you have time to properly evaluate it"],
+    np: [1]
+  },
+  {
+    q: "When you fail at something, your first move is:",
+    a: ["Analyse what went wrong conceptually",
+        "Try a different approach immediately",
+        "Look for examples of how others handled the same situation",
+        "Take time to process before acting again"],
+    np: [1]
+  },
+  {
+    q: "What does your relationship with opinions look like?",
+    a: ["I have strong views on most things in my domain",
+        "I update views fast when I build something that contradicts them",
+        "I form views by reading widely and synthesising",
+        "I trust the consensus of people I respect"],
+    np: [1]
+  },
+  {
+    q: "The last time you learned something genuinely new, it came from:",
+    a: ["Reading, watching, or listening to someone explain it",
+        "Getting stuck on a real problem and having to solve it",
+        "A conversation where someone challenged your view",
+        "A structured course or curriculum"],
+    np: [1]
+  },
+  {
+    q: "Someone criticises your work harshly. You:",
+    a: ["Evaluate whether their critique is valid",
+        "Check whether the criticism affects what you're building next",
+        "Feel the sting but separate the signal from the noise",
+        "Wonder what their work looks like"],
+    np: [1]
+  },
+  {
+    q: "Your measure of a good week is:",
+    a: ["Having understood something important",
+        "Having shipped, written, or built something concrete",
+        "Having had good conversations and exchanges",
+        "Having stayed current with what's happening in your field"],
+    np: [1]
+  }
+];
+
+const labels = ["A","B","C","D"];
+
+function buildQuiz() {
+  const div = document.getElementById('quiz');
+  questions.forEach((q, i) => {
+    let html = `<div class="question" id="q${i}">
+      <p>${i+1}. ${q.q}</p>`;
+    q.a.forEach((ans, j) => {
+      html += `<label><input type="radio" name="q${i}" value="${j}">
+        <strong>${labels[j]}.</strong> ${ans}</label>`;
+    });
+    html += `</div>`;
+    div.innerHTML += html;
+  });
+}
+
+function submit() {
+  let np = 0, answered = 0;
+  let missing = [];
+  questions.forEach((q, i) => {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if (!sel) { missing.push(i+1); return; }
+    answered++;
+    if (q.np.includes(parseInt(sel.value))) np++;
+  });
+
+  if (missing.length > 0) {
+    alert(`Please answer question(s): ${missing.join(', ')}`);
+    return;
+  }
+
+  const p = answered - np;
+  const npPct = Math.round((np / answered) * 100);
+  const pPct = 100 - npPct;
+
+  let verdict, desc, color;
+  if (npPct >= 80) {
+    verdict = "Strong Producer";
+    color = "#1565c0";
+    desc = `Your instincts are oriented toward production. You build before you evaluate, you learn from constraints, and you measure weeks by output rather than by understanding. Under the Besserwisser framework, your Information Gain per unit time is ≥ log₂|D| bits — you operate in NP. The risk: you may ship things without enough external calibration. The upside: you generate information that cannot be obtained by evaluation alone.`;
+  } else if (npPct >= 55) {
+    verdict = "Mixed — Producer-leaning";
+    color = "#1976d2";
+    desc = `You have a genuine production orientation but still rely heavily on external verification before acting. You're likely effective but may be leaving output on the table by over-researching before building. The Besserwisser Theorem is not a concern for you yet, but watch whether evaluation is crowding out production time.`;
+  } else if (npPct >= 35) {
+    verdict = "Mixed — Verification-leaning";
+    color = "#e65100";
+    desc = `You tend to evaluate before you produce. This is not a character flaw — it's a protocol installed by years of educational systems that reward verification. The question is whether your competence gap G = C − I is growing over time. If you accumulate more opinions than outputs, the gap widens. One forced production cycle — ship something — often resets the trajectory.`;
+  } else {
+    verdict = "Classic Besserwisser";
+    color = "#c62828";
+    desc = `Your instincts are strongly oriented toward evaluation. You form opinions quickly, you notice flaws, and you feel more comfortable judging than building. Under the Besserwisser Theorem, k evaluations generate at most k bits of domain knowledge — and no accumulation of evaluations closes the gap to NP. The good news: you likely have latent production capacity that the protocol is suppressing. The Protocol Mutation Hypothesis (Vosteen 2026c) suggests one real failure experience often breaks the loop.`;
+  }
+
+  const res = document.getElementById('result');
+  res.style.display = 'block';
+  res.innerHTML = `
+    <h2 style="color:${color}">${verdict}</h2>
+    <p><strong>NP-orientation (Producer):</strong></p>
+    <div class="bar-wrap"><div class="bar np-bar" style="width:${npPct}%"></div></div>
+    <div class="score-label">${npPct}% — ${np}/${answered} questions</div>
+    <p style="margin-top:16px"><strong>P-orientation (Besserwisser):</strong></p>
+    <div class="bar-wrap"><div class="bar p-bar" style="width:${pPct}%"></div></div>
+    <div class="score-label">${pPct}% — ${p}/${answered} questions</div>
+    <p style="margin-top:20px">${desc}</p>
+    <div class="theorem">
+      <strong>Theorem (Vosteen 2026a).</strong> Under P≠NP, no Besserwisser strategy
+      <em>B</em> solves the Production Problem, regardless of how many evaluations it performs.
+      Information bound (unconditional): <em>k</em> evaluations yield ≤ <em>k</em> bits;
+      one production operation yields log₂|D| bits.
+    </div>
+    <p style="margin-top:16px; font-size:0.85em; color:#666">
+      This quiz is illustrative, not validated. Take it seriously enough to reflect,
+      not seriously enough to frame.
+    </p>`;
+
+  res.scrollIntoView({behavior:'smooth'});
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
