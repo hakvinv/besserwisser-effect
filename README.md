@@ -4,7 +4,7 @@
 
 This project explores the gap between evaluation and production through a formal model, an illustrative dynamics model, and three empirical predictions. It asks whether repeatedly evaluating other people's work can substitute for the experience of creating work yourself.
 
-[**Read the paper →**](Vosteen_2026_Besserwisser_Effect_final.pdf) &nbsp; · &nbsp; [**Try the interactive self-test →**](https://hakvinv.github.io/besserwisser-effect/besserwisser-quiz.html)
+[**Read the preprint on SSRN →**](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6503718) &nbsp; · &nbsp; [Download the paper](Vosteen_2026_Besserwisser_Effect_final.pdf) &nbsp; · &nbsp; [Try the interactive self-test](https://hakvinv.github.io/besserwisser-effect/besserwisser-quiz.html)
 
 ## The argument
 
@@ -60,7 +60,9 @@ python besserwisser_fig2.py
             Criticism Cannot Substitute for Production},
   author = {Vosteen, Hakvin},
   year   = {2026},
-  url    = {https://github.com/hakvinv/besserwisser-effect}
+  doi    = {10.2139/ssrn.6503718},
+  url    = {https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6503718},
+  note   = {SSRN preprint}
 }
 ```
 
