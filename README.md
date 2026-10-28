@@ -48,9 +48,9 @@ This result requires no complexity-theoretic assumption. It follows directly fro
 | Agent | Operations | Information Generated |
 |---|---|---|
 | Besserwisser | 100 evaluations | 100 bits |
-| Producer | 1 production act | 20,000 bits |
+| Producer | 1 production act | 20 bits |
 
-The ratio is **20,000 : 1** per operation. For realistic domains the gap is astronomical and grows with domain expressiveness.
+The ratio is **20 : 1** per operation. For realistic domains the gap is astronomical and grows with domain expressiveness.
 
 ### Application: Educational Systems
 
