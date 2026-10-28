@@ -28,6 +28,20 @@ These are **claims of the paper under its modeling assumptions**. The complexity
 
 The paper's numerical illustration uses a domain of size 2²⁰. Its logarithm is **20 bits**; in the stated model, 100 binary evaluations have an upper bound of 100 bits, not 20. This arithmetic comparison alone does not establish that one production act creates 20 new bits of knowledge.
 
+## Figures from the paper
+
+### Complexity and information
+
+![The paper's conceptual complexity landscape and information comparison](assets/figure-1.png)
+
+*Figure 1, from page 3 of the preprint.* The left panel depicts the paper's conditional complexity argument; the right panel illustrates its information comparison. Both are theoretical illustrations, not observed data.
+
+### The competence-gap model
+
+![The paper's competence-gap trajectories and phase portrait](assets/figure-2.png)
+
+*Figure 2, from page 4 of the preprint.* The panels show the paper's proposed trajectories and phase portrait. The left panel contains a mismatch: the blue line rises while its label says it approaches zero. The figure requires correction before it supports that interpretation.
+
 ## Three questions for empirical testing
 
 1. Do people with production experience make better-calibrated judgments than people with similar exposure but no production experience?
