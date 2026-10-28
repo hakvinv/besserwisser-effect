@@ -1,146 +1,67 @@
-# The Besserwisser Effect:<br>A Complexity-Theoretic Proof that Criticism Cannot Substitute for Production
+# The Besserwisser Effect
 
-<p align="center">
-  <a href="Vosteen_2026_Besserwisser_Effect_final.pdf"><img src="https://img.shields.io/badge/Paper-PDF-red?style=flat-square&logo=adobe-acrobat-reader" alt="Paper PDF"/></a>
-  <a href="https://github.com/hakvinv"><img src="https://img.shields.io/badge/Author-Hakvin%20Vosteen-blue?style=flat-square&logo=github" alt="Author"/></a>
-  <img src="https://img.shields.io/badge/Year-2026-lightgrey?style=flat-square" alt="2026"/>
-  <img src="https://img.shields.io/badge/Domain-Complexity%20Theory%20%7C%20Information%20Theory-green?style=flat-square" alt="Domain"/>
-  <img src="https://img.shields.io/badge/License-CC%20BY%204.0-yellow?style=flat-square" alt="License"/>
-</p>
+**What is the difference between judging an artifact and producing one?**
 
-<p align="center">
-  <strong>Watching more film reviews does not make you a better filmmaker.<br>
-  This paper proves it — formally, under P ≠ NP and unconditionally via Shannon's theorem.</strong>
-</p>
+This project explores the gap between evaluation and production through a formal model, an illustrative dynamics model, and three empirical predictions. It asks whether repeatedly evaluating other people's work can substitute for the experience of creating work yourself.
 
----
+[**Read the paper →**](Vosteen_2026_Besserwisser_Effect_final.pdf) &nbsp; · &nbsp; [**Try the interactive self-test →**](https://hakvinv.github.io/besserwisser-effect/besserwisser-quiz.html)
 
-## Abstract
+## The argument
 
-> We provide a formal account of a widely observed empirical regularity: individuals with no production experience in a domain exhibit systematic overconfidence when evaluating artifacts produced by others. We call this the *Besserwisser Effect*. Assuming **P ≠ NP**, we prove that the Production Problem — finding a quality artifact in an expressive domain — is NP-hard, while the Verification Problem — judging a given artifact — lies in P. This complexity gap is **categorical**: no polynomial accumulation of evaluation operations can solve an NP-hard production task (Theorem 1). An information-theoretic complement, which holds **unconditionally**, shows that *k* evaluation operations generate at most *k* bits of novel domain knowledge, while a single production operation generates Ω(log|*D*|) bits, where |*D*| is the domain size (Proposition 1). We apply the framework to educational systems, showing that standard curricula are structurally evaluation-training machines, and derive three falsifiable empirical predictions.
->
-> **Keywords:** computational complexity, P vs NP, verification, production, expertise, Dunning-Kruger, information theory, education
+The paper distinguishes two operations:
 
----
+- **Verification:** evaluating a supplied candidate against a criterion.
+- **Production:** finding or constructing a candidate that satisfies the criterion.
 
-## Key Results
+It proposes that the second problem can be computationally harder than the first, and uses that distinction to frame a broader question about expertise. The paper presents a conditional complexity argument under **P ≠ NP**, an information-theoretic comparison, and a model of how accumulated complexity and integration evolve over time.
 
-### The Besserwisser Theorem
+These are **claims of the paper under its modeling assumptions**. The complexity argument does not by itself establish a general psychological law about critics, students, or creators. The information comparison also depends on how candidates, prior information, and observations are defined; an artifact's bit length alone does not establish how much new knowledge its creator gained.
 
-> **Theorem 3.** *Assume* **P ≠ NP**. *No Besserwisser strategy* **B** *solves* **PROD**, *regardless of how many evaluations it performs.*
+## What the model illustrates
 
-A **Besserwisser strategy** is any poly(*n*)-time algorithm that operates exclusively by calling **VER** (the Verification oracle) on externally supplied artifacts — it never constructs a new element of the domain. The theorem states that such strategies are permanently confined to the complexity class P, while **PROD** (finding a quality artifact) is NP-hard. The gap is not a gradient. It is a wall.
-
-### The Accumulation Corollary
-
-> **Corollary 4** *(Accumulation is irrelevant).* *Performing k additional evaluations does not reduce the complexity of* **PROD** *for any k ∈ ℕ.*
-
-Watching ten thousand more films, reading ten thousand more papers, submitting ten thousand more code reviews — none of it changes the complexity class. The boundary is categorical.
-
-### The Information Gap (Unconditional)
-
-> **Proposition 5.** Let |*D*| = 2ⁿ.
-> - *(i)* **k evaluations generate at most k bits** of domain knowledge.
-> - *(ii)* **One production operation generates at least n = log₂|D| bits** (under a uniform prior over *D*).
-
-This result requires no complexity-theoretic assumption. It follows directly from Shannon's source coding theorem. For a modest domain of size |*D*| = 2²⁰:
-
-| Agent | Operations | Information Generated |
+| Part of the paper | What it examines | Status |
 |---|---|---|
-| Besserwisser | 100 evaluations | 100 bits |
-| Producer | 1 production act | 20 bits |
+| Complexity | Verification and production as different computational tasks | Conditional theoretical argument; depends on the problem definitions and P ≠ NP |
+| Information | Bits obtained from evaluation versus information in a produced artifact | Model-dependent comparison, not a measured learning rate |
+| Dynamics | The relationship between accumulated complexity and integration | Illustrative model trajectories, not observed data |
+| Predictions | Calibration, long-term competence, and the role of production experience | Empirical hypotheses requiring testing |
 
-The ratio is **20 : 1** per operation. For realistic domains the gap is astronomical and grows with domain expressiveness.
+The paper's numerical illustration uses a domain of size 2²⁰. Its logarithm is **20 bits**; in the stated model, 100 binary evaluations have an upper bound of 100 bits, not 20. This arithmetic comparison alone does not establish that one production act creates 20 new bits of knowledge.
 
-### Application: Educational Systems
+## Three questions for empirical testing
 
-Standard educational curricula are structurally **evaluation-training machines**. Their primary instruments — examinations, essays, presentations — are verification tasks. A student completing 12 years of school and 5 years of university accumulates approximately **17 years of intensive VER training** with negligible PROD experience. By Theorem 3 and Corollary 4, this produces agents optimized for evaluation with no formal production capacity.
+1. Do people with production experience make better-calibrated judgments than people with similar exposure but no production experience?
+2. How does the relationship between accumulated complexity and the ability to integrate it change over time?
+3. Does early production experience predict later creative or technical output after accounting for other factors?
 
-> The Dunning-Kruger phenomenon is not a pathology of this system — it is its **optimal output** given the objective function being maximized (VER-score).
+The paper proposes study designs for these questions. The repository does not contain empirical data validating the predictions.
 
-### Three Falsifiable Predictions
+## Figures and reproduction
 
-| # | Prediction | Test |
-|---|---|---|
-| **P1** | Critics show higher confidence but lower prospective accuracy than producers with equal artifact exposure | Blind evaluation experiment across creative, technical, or analytic domains |
-| **P2** | The ratio C(t)/I(t) diverges for pure evaluators and stabilizes for producers over longitudinal observation | Longitudinal records tracking consumption vs. production per individual over ≥ 3 years |
-| **P3** | Hobby-intensity during student years correlates positively with artifacts-produced a decade later; GPA correlates near-zero or negatively after controlling for hobby intensity | SOEP panel data or alumni survey |
+The repository includes two scripts that generate conceptual figures. Run them in a clean working directory with Python, NumPy, SciPy, and Matplotlib:
 
----
-
-## Figures
-
-The repository includes two Python scripts reproducing all four figures from the paper.
-
-### Figure 1 — `besserwisser_fig1.py`
-
-Produces `fig1_theory.pdf` with two panels:
-
-**Panel (a) — Complexity landscape under P ≠ NP.**
-A Venn diagram of the complexity hierarchy. Besserwisser strategies (red dot, labeled **B ∈ P**) are confined to the inner P ellipse (green). The Producer task **PROD ∈ NP\P** (blue square) lies in the outer region. A double-headed arrow marks the "structural gap." A yellow annotation box states the consequence: P ≠ NP ⟹ ∄ **B** solves PROD.
-
-**Panel (b) — Information gap (unconditional).**
-A plot of information generated (bits) vs. operations *k*. The Besserwisser line grows as *k* (linear, red). Three horizontal dashed lines mark the Producer's per-operation output at log₂|D| = 10, 20, and 30 bits. The shaded region above the Besserwisser line illustrates the exponential deficit that cannot be closed by any number of evaluations.
-
-### Figure 2 — `besserwisser_fig2.py`
-
-Produces `fig2_stuckness.pdf` with two panels:
-
-**Panel (c) — Competence gap G = C − I over time.**
-Time series showing G(t) = C(t) − I(t) for both agent types. The Besserwisser trajectory (red) diverges monotonically to infinity as complexity accumulates with near-zero integration. The Producer trajectory (blue) crosses zero at t* — the *flow onset* — and converges toward G = 0 as production drives integration superlinearly.
-
-**Panel (d) — Phase portrait in (C, I) space.**
-A RdBu color field mapping G = C − I across the (C, I) plane, with the G = 0 isocline drawn in black. The red trajectory (Besserwisser) moves nearly horizontally — accumulating C with almost no I. The blue trajectory (Producer) ascends steeply into the G < 0 region. No sequence of horizontal moves reaches the flow boundary {G = 0} — the geometric restatement of Theorem 3.
-
----
-
-## Reproduction
-
-**Requirements:** Python 3.x with `matplotlib`, `numpy`, `scipy`.
-
-```bash
-pip install matplotlib numpy scipy
-```
-
-```bash
-# Figure 1: Complexity landscape + information gap
+```sh
+git clone https://github.com/hakvinv/besserwisser-effect.git
+cd besserwisser-effect
+python -m venv .venv
+source .venv/bin/activate
+pip install numpy scipy matplotlib
 python besserwisser_fig1.py
-# → fig1_theory.pdf
-
-# Figure 2: Competence gap dynamics + phase portrait
 python besserwisser_fig2.py
-# → fig2_stuckness.pdf
 ```
 
-Both scripts render at 300 dpi in publication quality using Computer Modern–style serif fonts via matplotlib's `mathtext.fontset: cm`.
-
----
-
-## Interactive Self-Test
-
-The repo includes an interactive HTML quiz that operationalizes the Besserwisser Theorem as a self-assessment. Open `besserwisser-quiz.html` in your browser or [try it live via GitHub Pages](https://hakvinv.github.io/besserwisser-effect/besserwisser-quiz.html).
+`besserwisser_fig1.py` writes both `fig1_theory.pdf` and `fig2_stuckness.pdf`. Running `besserwisser_fig2.py` afterwards replaces `fig2_stuckness.pdf` with its own version. The figures illustrate the paper's models; they are not empirical measurements.
 
 ## Citation
 
 ```bibtex
 @article{vosteen2026besserwisser,
-  title     = {The Besserwisser Effect: A Complexity-Theoretic Proof that
-               Criticism Cannot Substitute for Production},
-  author    = {Vosteen, Hakvin},
-  year      = {2026},
-  url       = {https://github.com/hakvinv/besserwisser-effect}
+  title  = {The Besserwisser Effect: A Complexity-Theoretic Proof that
+            Criticism Cannot Substitute for Production},
+  author = {Vosteen, Hakvin},
+  year   = {2026},
+  url    = {https://github.com/hakvinv/besserwisser-effect}
 }
 ```
 
----
-
-## License
-
-This work is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt the material for any purpose, provided appropriate credit is given.
-
----
-
-<p align="center">
-  <em>"There is no polynomial path from criticism to production competence.<br>The only route is production."</em><br>
-  — Conclusion, §9
-</p>
+The paper is presented under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
